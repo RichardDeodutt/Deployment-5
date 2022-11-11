@@ -1,0 +1,47 @@
+name: Update Forked Repo
+
+on: 
+  workflow_dispatch: 
+    branches: 
+      - main
+
+env: 
+  USER_GITHUB_USERNAME: ${{ secrets.USER_GITHUB_USERNAME }}
+  USER_GITHUB_EMAIL: ${{ secrets.USER_GITHUB_EMAIL }}
+  USER_GITHUB_SSH_KEY_BASE64: ${{ secrets.USER_GITHUB_SSH_KEY_BASE64 }}
+  THIS_GITHUB_REPO_URL: ${{ secrets.THIS_GITHUB_REPO_URL }}
+  JENKINS_GITHUB_REPO_URL: ${{ secrets.JENKINS_GITHUB_REPO_URL }}
+
+jobs: 
+  update-forked-repo: 
+    name: Update Forked Repo
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: .
+    steps: 
+    - name: Setup Env
+      run: |
+          mkdir files
+          echo $USER_GITHUB_SSH_KEY_BASE64 | base64 -i --decode > files/id_rsa
+          chmod 600 files/id_rsa
+          echo $THIS_GITHUB_REPO_URL | cut -d "/" -f4 > THIS_GITHUB_REPO_OWNER
+          echo $THIS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//' > THIS_GITHUB_REPO_NAME
+          echo "https://github.com/$(cat THIS_GITHUB_REPO_OWNER)/$(cat THIS_GITHUB_REPO_NAME).git" > THIS_GITHUB_REPO_HTTPS
+          echo "git@github.com:$(cat THIS_GITHUB_REPO_OWNER)/$(cat THIS_GITHUB_REPO_NAME).git" > THIS_GITHUB_REPO_SSH
+          echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f4 > FORKED_GITHUB_REPO_OWNER
+          echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//' > FORKED_GITHUB_REPO_NAME
+          echo "https://github.com/$(cat FORKED_GITHUB_REPO_OWNER)/$(cat FORKED_GITHUB_REPO_NAME).git" > FORKED_GITHUB_REPO_HTTPS
+          echo "git@github.com:$(cat FORKED_GITHUB_REPO_OWNER)/$(cat FORKED_GITHUB_REPO_NAME).git" > FORKED_GITHUB_REPO_SSH
+    - name: Git Clone This Repo
+      run: git -c core.sshCommand="ssh -i files/id_rsa" clone $(cat THIS_GITHUB_REPO_SSH)
+    - name: Git Clone Forked Repo
+      run: git -c core.sshCommand="ssh -i files/id_rsa" clone $(cat FORKED_GITHUB_REPO_SSH)
+    - name: Copy
+      run: cp -a $(cat THIS_GITHUB_REPO_NAME)/Modified-Application-Files/* $(cat FORKED_GITHUB_REPO_NAME)/
+    - name: GitHub Update
+      run: cd $(cat FORKED_GITHUB_REPO_NAME) && git add . && git config user.name "$(echo $USER_GITHUB_USERNAME)" && git config user.email "$(echo $USER_GITHUB_EMAIL)" && git commit -m "GA Update" && git -c core.sshCommand="ssh -i ../files/id_rsa" push
+    - name: Delete SSH Key
+      if: always()
+      run: rm files/id_rsa
