@@ -315,7 +315,7 @@ Set up a CI/CD pipeline from start to finish using a Jenkins server and deployin
 
 - AWS_SECGROUPNAME
 
-    - Your secgroupname to use for your EC2 based on your security groups Created on AWS. Must be already generated.  
+    - Your secgroupname to use for your EC2 based on your security groups Created on AWS. Must be already generated and contain no spaces or dots.
 
         Secrets/Variables:
 
@@ -326,7 +326,7 @@ Set up a CI/CD pipeline from start to finish using a Jenkins server and deployin
         Example Below: 
 
         ```
-        Jenkins Ports
+        Jenkins
         ```
 
 </details>
