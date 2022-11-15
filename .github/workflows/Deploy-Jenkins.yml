@@ -58,7 +58,7 @@ jobs:
     - name: Terraform Apply
       run: terraform apply --auto-approve
     - name: Terraform Output
-      run: terraform output -raw ec2publicip > files/ip
+      run: terraform output -raw jenkinsec2publicip > files/ip
     - name: SSH Add Credentials and IP
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; echo $JENKINS_USERNAME | sudo tee JENKINS_USERNAME > /dev/null 2>&1 && echo $JENKINS_PASSWORD | sudo tee JENKINS_PASSWORD > /dev/null 2>&1 && echo $JENKINS_EMAIL | sudo tee JENKINS_EMAIL > /dev/null 2>&1 && echo $(curl -s https://checkip.amazonaws.com) | sudo tee JENKINS_IP > /dev/null 2>&1"
     - name: SSH Install Jenkins
