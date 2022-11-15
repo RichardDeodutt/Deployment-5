@@ -48,7 +48,7 @@ jobs:
     - name: Replace Placeholder AWS_SECGROUPNAME
       run: python3 ../../Utilities/replacer.py terraform.tfvars terraform.tfvars ~secgroupname~ $AWS_SECGROUPNAME
     - name: Decode and Save SSH Key
-      run: mkdir files && echo $AWS_SSH_KEY_BASE64 | base64 -i --decode > files/id_rsa
+      run: mkdir files && echo $AWS_SSH_KEY_BASE64 | base64 -i --decode > files/id_rsa && chmod 600 files/id_rsa
     - name: Terraform Init
       run: terraform init
     - name: Terraform Validate

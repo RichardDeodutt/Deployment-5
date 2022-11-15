@@ -26,7 +26,7 @@ admincheck(){
 #The main function
 main(){
     #RDGOAT = Run Directory Gather Organize All Together
-    cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/postconfigurejenkins.sh && chmod +x postconfigurejenkins.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/libstandard.sh && chmod +x libstandard.sh && ./postconfigurejenkins.sh || exiterror
+    cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Scripts/postconfigurejenkins.sh && chmod +x postconfigurejenkins.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Scripts/libstandard.sh && chmod +x libstandard.sh && ./postconfigurejenkins.sh || exiterror
 }
 
 #Check for admin permissions

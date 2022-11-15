@@ -26,7 +26,7 @@ admincheck(){
 #The main function
 main(){
     #RDGOAT = Run Directory Gather Organize All Together
-    cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/installdocker.sh && chmod +x installdocker.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/libstandard.sh && chmod +x libstandard.sh && ./installdocker.sh || exiterror
+    cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Scripts/installdocker.sh && chmod +x installdocker.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Scripts/libstandard.sh && chmod +x libstandard.sh && ./installdocker.sh || exiterror
 }
 
 #Check for admin permissions

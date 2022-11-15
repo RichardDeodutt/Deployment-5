@@ -20,7 +20,7 @@ LogFileName="ConfigureJenkins.log"
 setlogs
 
 #The configuration for Jenkins
-ConfigJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Configs/jenkins-configure.groovy"
+ConfigJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Configs/jenkins-configure.groovy"
 
 #The filename of the configuration file for Jenkins
 ConfigJenkinsFileName="jenkins-configure.groovy"
