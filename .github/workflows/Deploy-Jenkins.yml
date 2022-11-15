@@ -18,7 +18,7 @@ env:
   AWS_AMI: ${{ secrets.AWS_AMI }}
   AWS_ITYPE: ${{ secrets.AWS_ITYPE }}
   AWS_KEYNAME: ${{ secrets.AWS_KEYNAME }}
-  AWS_SECGROUPNAME: ${{ secrets.AWS_KEYNAME }}
+  AWS_SECGROUPNAME: ${{ secrets.AWS_SECGROUPNAME }}
 
 jobs: 
   deploy-pipeline: 
