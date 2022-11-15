@@ -1,3 +1,3 @@
-region = ~region~
-bucketname =  ~bucketname~
-tablename = ~tablename~
+region = "~region~"
+bucketname = "~bucketname~"
+tablename = "~tablename~"
