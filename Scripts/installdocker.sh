@@ -44,6 +44,9 @@ main(){
 
     #Add 'ubuntu' user to the docker group so sudo is not required to run docker commands.
     sudo usermod -aG docker ubuntu
+
+    #Use the new changes to the group docker
+    #newgrp docker
 }
 
 #Log start
