@@ -13,11 +13,6 @@ variable "itype"{
     default = "t2.micro"
 }
 
-variable "publicip"{
-    type = bool
-    default = true
-}
-
 variable "keyname"{
     type = string
     default = "Tokyo"
@@ -26,9 +21,4 @@ variable "keyname"{
 variable "secgroupname"{
     type = string
     default = "Jenkins Ports"
-}
-
-variable "ec2name"{
-    type = string
-    default = "Jenkins"
 }

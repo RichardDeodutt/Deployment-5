@@ -1,0 +1,5 @@
+region = "~region~"
+ami = "~ami~"
+itype = "~itype~"
+keyname = "~keyname~"
+secgroupname = "~secgroupname~"

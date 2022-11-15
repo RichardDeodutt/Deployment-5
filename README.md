@@ -265,4 +265,68 @@ Set up a CI/CD pipeline from start to finish using a Jenkins server and deployin
         ap-northeast-1
         ```
 
+- AWS_AMI
+
+    - Your AMI to use for your EC2 based on the region selected. 
+
+        Secrets/Variables:
+
+        ```
+        AWS_AMI
+        ```
+
+        Example Below: 
+
+        ```
+        ami-03f4fa076d2981b45
+        ```
+
+- AWS_ITYPE
+
+    - Your itype to use for your EC2 based on your needs. 
+
+        Secrets/Variables:
+
+        ```
+        AWS_ITYPE
+        ```
+
+        Example Below: 
+
+        ```
+        t2.micro
+        ```
+
+- AWS_KEYNAME
+
+    - Your keyname to use for your EC2 based on your SSH Keys generated on AWS. Must be already generated.  
+
+        Secrets/Variables:
+
+        ```
+        AWS_KEYNAME
+        ```
+
+        Example Below: 
+
+        ```
+        Tokyo
+        ```
+
+- AWS_SECGROUPNAME
+
+    - Your secgroupname to use for your EC2 based on your security groups Created on AWS. Must be already generated.  
+
+        Secrets/Variables:
+
+        ```
+        AWS_SECGROUPNAME
+        ```
+
+        Example Below: 
+
+        ```
+        Jenkins Ports
+        ```
+
 </details>
