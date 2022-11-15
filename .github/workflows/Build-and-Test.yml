@@ -31,6 +31,8 @@ jobs:
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Runners/runconfigurejenkins.sh && sudo chmod +x runconfigurejenkins.sh && sudo ./runconfigurejenkins.sh
     - name: Terraform Install Unit Test
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Runners/runinstallterraform.sh && sudo chmod +x runinstallterraform.sh && sudo ./runinstallterraform.sh
+    - name: Docker Install Unit Test
+      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Runners/runinstalldocker.sh && sudo chmod +x runinstalldocker.sh && sudo ./runinstalldocker.sh
     - name: SSH Install Venv
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Runners/runinstallvenv.sh && sudo chmod +x runinstallvenv.sh && sudo ./runinstallvenv.sh
     - name: Agent Install Unit Test
