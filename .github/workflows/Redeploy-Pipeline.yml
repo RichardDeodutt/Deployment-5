@@ -55,6 +55,8 @@ jobs:
       run: terraform validate
     - name: Terraform Destroy
       run: terraform destroy --auto-approve
+    - name: Terraform Apply
+      run: terraform apply --auto-approve
     - name: Jenkins - Terraform Output
       run: terraform output -raw jenkinsec2publicip > files/jenkinsip
     - name: Jenkins SSH Add Credentials and IP
