@@ -25,7 +25,7 @@ main(){
     wget -q -O - https://download.docker.com/linux/ubuntu/gpg | gpg --batch --yes --dearmor -o /etc/apt/keyrings/docker.gpg && logokay "Successfully installed ${Name} keyring" || { logerror "Failure installing ${Name} keyring" && exiterror ; }
 
     #Adding the repo to the sources of apt if not already
-    sh -c 'echo "deb [[arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list' && logokay "Successfully installed ${Name} repo" || { logerror "Failure installing ${Name} repo" && exiterror ; }
+    sh -c 'echo "deb [signed-by=/usr/share/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list' && logokay "Successfully installed ${Name} repo" || { logerror "Failure installing ${Name} repo" && exiterror ; }
 
     #Update local apt repo database
     aptupdatelog
