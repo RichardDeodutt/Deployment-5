@@ -25,6 +25,9 @@ ConfigSecretJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment
 #The configuration for Jenkins cred
 ConfigCredJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Configs/credential-cred-jenkins-default.xml"
 
+#The configuration for Jenkins ssh
+ConfigSSHJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Configs/credential-ssh-jenkins-default.xml"
+
 #The configuration for Jenkins job
 ConfigJobJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Configs/job-build-jenkins-default.xml"
 
@@ -34,6 +37,9 @@ ConfigSecretJenkinsFileName="credential-secret-jenkins-default.xml"
 #The filename of the cred configuration file for Jenkins
 ConfigCredJenkinsFileName="credential-cred-jenkins-default.xml"
 
+#The filename of the cred configuration file for Jenkins
+ConfigSSHJenkinsFileName="credential-ssh-jenkins-default.xml"
+
 #The filename of the job configuration file for Jenkins
 ConfigJobJenkinsFileName="job-build-jenkins-default.xml"
 
@@ -42,23 +48,23 @@ JENKINS_USERNAME=$(cat JENKINS_USERNAME)
 #Password
 JENKINS_PASSWORD=$(cat JENKINS_PASSWORD)
 
-#Formatted AWS_ACCESS_KEY_ID
+#AWS_ACCESS_KEY_ID
 AWS_ACCESS_KEY_ID=$(cat AWS_ACCESS_KEY_ID)
 #Id AWS_ACCESS_KEY_ID
 Id_AWS_ACCESS_KEY_ID="AWS_ACCESS_KEY_ID"
 #Description AWS_ACCESS_KEY_ID
 Description_AWS_ACCESS_KEY_ID="AWS_ACCESS_KEY_ID"
 
-#Formatted AWS_SECRET_ACCESS_KEY
+#AWS_SECRET_ACCESS_KEY
 AWS_SECRET_ACCESS_KEY=$(cat AWS_SECRET_ACCESS_KEY)
 #Id AWS_SECRET_ACCESS_KEY
 Id_AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY"
 #Description AWS_SECRET_ACCESS_KEY
 Description_AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY"
 
-#Formatted GITHUB_USERNAME
+#GITHUB_USERNAME
 USER_GITHUB_USERNAME=$(cat USER_GITHUB_USERNAME)
-#Formatted GITHUB_TOKEN
+#GITHUB_TOKEN
 USER_GITHUB_TOKEN=$(cat USER_GITHUB_TOKEN)
 #Id GITHUB_CRED
 Id_GITHUB_CRED="GITHUB_CRED"
@@ -73,6 +79,15 @@ JENKINS_GITHUB_REPO_URL=$(cat JENKINS_GITHUB_REPO_URL)
 JENKINS_GITHUB_REPO_OWNER=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f4)
 #JENKINS_GITHUB_REPO_NAME
 JENKINS_GITHUB_REPO_NAME=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//')
+
+#JENKINS_SSH_KEY
+JENKINS_SSH_KEY=$(cat JENKINS_SSH_KEY)
+#Username JENKINS_SSH_KEY
+Username_JENKINS_SSH_KEY="ubuntu"
+#Id JENKINS_SSH_KEY
+Id_JENKINS_SSH_KEY="SSH"
+#Description JENKINS_SSH_KEY
+Description_JENKINS_SSH_KEY="SSH"
 
 #Store the initial secret config for Jenkins here
 LoadedInitialConfigJenkins=""
@@ -138,6 +153,21 @@ main(){
 
     #Remove cred configure file
     rm $ConfigCredJenkinsFileName && logokay "Successfully removed cred configure file for ${Name}" || { logerror "Failure removing cred configure file for ${Name}" && exiterror ; }
+
+    #Get the Jenkins SSH configure file
+    curl -s -X GET $ConfigSSHJenkins -O && logokay "Successfully obtained SSH configure file for ${Name}" || { logerror "Failure obtaining SSH configure file for ${Name}" && exiterror ; }
+
+    #Load the initial configuration for Jenkins
+    LoadedInitialConfigJenkins=$(cat $ConfigSSHJenkinsFileName) && logokay "Successfully loaded SSH configure file for ${Name}" || { logerror "Failure loading SSH configure file for ${Name}" && exiterror ; }
+
+    #Set the ID, Description, Username and SSH-Key for the SSH configure file placeholders for SSH
+    echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_JENKINS_SSH_KEY/g" | sed "s/~Description~/$Description_JENKINS_SSH_KEY/g" | sed "s,~Username~,$Username_JENKINS_SSH_KEY,g" | sed "s,~SSH-Key~,$JENKINS_SSH_KEY,g" > $ConfigSSHJenkinsFileName && logokay "Successfully set SSH configure file for ${Name} SSH" || { logerror "Failure setting SSH configure file for ${Name} SSH" && exiterror ; }
+
+    #Remote send the SSH config SSH
+    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-credentials-by-xml system::system::jenkins _ < $ConfigSSHJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send SSH config for ${Name} SSH" || { test $? -eq 1 && logwarning "SSH config for ${Name} SSH already exists nothing changed" || { logerror "Failure executing send SSH config for ${Name} SSH" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
+
+    #Remove SSH configure file
+    rm $ConfigSSHJenkinsFileName && logokay "Successfully removed SSH configure file for ${Name}" || { logerror "Failure removing SSH configure file for ${Name}" && exiterror ; }
 
     #Get the Jenkins job configure file
     curl -s -X GET $ConfigJobJenkins -O && logokay "Successfully obtained job configure file for ${Name}" || { logerror "Failure obtaining job configure file for ${Name}" && exiterror ; }
