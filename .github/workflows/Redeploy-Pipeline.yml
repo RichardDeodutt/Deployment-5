@@ -60,7 +60,7 @@ jobs:
     - name: Jenkins - Terraform Output
       run: terraform output -raw jenkinsec2publicip > files/jenkinsip
     - name: Jenkins SSH Add Credentials and IP
-      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/jenkinsip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; echo $JENKINS_USERNAME | sudo tee JENKINS_USERNAME > /dev/null 2>&1 && echo $JENKINS_PASSWORD | sudo tee JENKINS_PASSWORD > /dev/null 2>&1 && echo $JENKINS_EMAIL | sudo tee JENKINS_EMAIL > /dev/null 2>&1 && echo $(curl -s https://checkip.amazonaws.com) | sudo tee JENKINS_IP > /dev/null 2>&1 && echo $AWS_SSH_KEY_BASE64 | base64 -i --decode | sudo tee JENKINS_SSH_KEY > /dev/null 2>&1"
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/jenkinsip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; echo $JENKINS_USERNAME | sudo tee JENKINS_USERNAME > /dev/null 2>&1 && echo $JENKINS_PASSWORD | sudo tee JENKINS_PASSWORD > /dev/null 2>&1 && echo $JENKINS_EMAIL | sudo tee JENKINS_EMAIL > /dev/null 2>&1 && echo $(curl -s https://checkip.amazonaws.com) | sudo tee JENKINS_IP > /dev/null 2>&1"
     - name: Jenkins - SSH Install Jenkins
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/jenkinsip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh"
     - name: Jenkins - SSH Configure Jenkins
@@ -79,7 +79,7 @@ jobs:
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/jenkinsip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Runners/runstatuscheck.sh && sudo chmod +x runstatuscheck.sh && sudo ./runstatuscheck.sh"
     - name: Jenkins - SSH Remove Credentials and IP
       if: always()
-      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/jenkinsip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; sudo rm JENKINS_USERNAME && sudo rm JENKINS_PASSWORD && sudo rm JENKINS_EMAIL && sudo rm JENKINS_IP && sudo rm JENKINS_SSH_KEY"
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/jenkinsip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; sudo rm JENKINS_USERNAME && sudo rm JENKINS_PASSWORD && sudo rm JENKINS_EMAIL && sudo rm JENKINS_IP"
     - name: Terraform - Terraform Output
       run: terraform output -raw terraformec2publicip > files/terraformip
     - name: Terraform - SSH Install Agent
