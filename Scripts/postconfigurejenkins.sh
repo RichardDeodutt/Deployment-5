@@ -179,7 +179,8 @@ main(){
     java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-credentials-by-xml system::system::jenkins _ < $ConfigSSHJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send SSH config for ${Name} SSH" || { test $? -eq 1 && logwarning "SSH config for ${Name} SSH already exists nothing changed" || { logerror "Failure executing send SSH config for ${Name} SSH" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
 
     #Remove SSH configure file
-    rm $ConfigSSHJenkinsFileName && logokay "Successfully removed SSH configure file for ${Name}" || { logerror "Failure removing SSH configure file for ${Name}" && exiterror ; }
+    #rm $ConfigSSHJenkinsFileName && logokay "Successfully removed SSH configure file for ${Name}" || { logerror "Failure removing SSH configure file for ${Name}" && exiterror ; }
+    #--Debug
 
     #Get the Jenkins job configure file
     curl -s -X GET $ConfigJobJenkins -O && logokay "Successfully obtained job configure file for ${Name}" || { logerror "Failure obtaining job configure file for ${Name}" && exiterror ; }
