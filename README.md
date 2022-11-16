@@ -43,7 +43,7 @@ Set up a CI/CD pipeline from start to finish using a Jenkins server and deployin
 
 - AWS_SSH_KEY_BASE64 
 
-    - AWS SSH Key Pair to SSH into the Jenkins Server EC2 in base64 format using the base64 command. 
+    - AWS SSH Key Pair to SSH into the Jenkins Server and Agents EC2 in base64 format using the base64 command. 
 
         Secrets/Variables:
 
@@ -139,7 +139,7 @@ Set up a CI/CD pipeline from start to finish using a Jenkins server and deployin
 
 - JENKINS_JOB_NAME 
 
-    - The name of the Build Job or Project Jenkins uses. 
+    - The name of the Build Job or Project Jenkins uses. Must contain no spaces or dots. 
 
         Secrets/Variables:
 
@@ -219,7 +219,7 @@ Set up a CI/CD pipeline from start to finish using a Jenkins server and deployin
 
 - BUCKET_NAME
 
-    - Your S3 bucket name for storing the Terraform statefile. 
+    - Your S3 bucket name for storing the Terraform statefile. Must not be already generated and contain no spaces or dots. 
 
         Secrets/Variables:
 
@@ -235,7 +235,7 @@ Set up a CI/CD pipeline from start to finish using a Jenkins server and deployin
 
 - TABLE_NAME
 
-    - Your DynamoDB table name for storing the lockfile of the Terraform statefile. 
+    - Your DynamoDB table name for storing the lockfile of the Terraform statefile. Must not be already generated and contain no spaces or dots. 
 
         Secrets/Variables:
 
@@ -299,7 +299,7 @@ Set up a CI/CD pipeline from start to finish using a Jenkins server and deployin
 
 - AWS_KEYNAME
 
-    - Your keyname to use for your EC2 based on your SSH Keys generated on AWS. Must be already generated.  
+    - Your keyname to use for your EC2 based on your SSH Keys generated on AWS. Must be already generated. Must be already generated and contain no spaces or dots. 
 
         Secrets/Variables:
 
@@ -315,7 +315,7 @@ Set up a CI/CD pipeline from start to finish using a Jenkins server and deployin
 
 - AWS_SECGROUPNAME
 
-    - Your secgroupname to use for your EC2 based on your security groups Created on AWS. Must be already generated and contain no spaces or dots.
+    - Your secgroupname to use for your EC2 based on your security groups Created on AWS. Must be already generated and contain no spaces or dots. 
 
         Secrets/Variables:
 
