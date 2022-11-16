@@ -80,14 +80,14 @@ jobs:
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/jenkinsip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; sudo rm JENKINS_USERNAME && sudo rm JENKINS_PASSWORD && sudo rm JENKINS_EMAIL && sudo rm JENKINS_IP"
     - name: Terraform - Terraform Output
       run: terraform output -raw terraformec2publicip > files/terraformip
-    - name: Terraform - SSH Install Java
-      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/terraformip) -tt "sudo apt-get update && sudo apt-get install default-jre -y"
+    - name: Terraform - SSH Install Agent
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/terraformip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Runners/runinstallagent.sh && sudo chmod +x runinstallagent.sh && sudo ./runinstallagent.sh"
     - name: Terraform - SSH Install Terraform
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/terraformip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Runners/runinstallterraform.sh && sudo chmod +x runinstallterraform.sh && sudo ./runinstallterraform.sh"
     - name: Docker - Terraform Output
       run: terraform output -raw dockerec2publicip > files/dockerip
-    - name: Docker - SSH Install Java
-      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/dockerip) -tt "sudo apt-get update && sudo apt-get install default-jre -y"
+    - name: Docker - SSH Install Agent
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/dockerip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Runners/runinstallagent.sh && sudo chmod +x runinstallagent.sh && sudo ./runinstallagent.sh"
     - name: Docker - SSH Install Docker
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/dockerip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Runners/runinstalldocker.sh && sudo chmod +x runinstalldocker.sh && sudo ./runinstalldocker.sh"
     - name: Delete SSH Key and IPs
