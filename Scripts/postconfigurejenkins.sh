@@ -19,6 +19,9 @@ LogFileName="PostConfigureJenkins.log"
 #Set the log file location and name
 setlogs
 
+#Replacer python program
+ConfigReplacer="https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Utilities/replacer.py"
+
 #The configuration for Jenkins secret
 ConfigSecretJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Configs/credential-secret-jenkins-default.xml"
 
@@ -30,6 +33,9 @@ ConfigSSHJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/
 
 #The configuration for Jenkins job
 ConfigJobJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Configs/job-build-jenkins-default.xml"
+
+#The filename of the Replacer python program
+ConfigReplacerFileName="replacer.py"
 
 #The filename of the secret configuration file for Jenkins
 ConfigSecretJenkinsFileName="credential-secret-jenkins-default.xml"
@@ -81,7 +87,7 @@ JENKINS_GITHUB_REPO_OWNER=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f4)
 JENKINS_GITHUB_REPO_NAME=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//')
 
 #JENKINS_SSH_KEY
-JENKINS_SSH_KEY=$(cat JENKINS_SSH_KEY)
+JENKINS_SSH_KEY="$(cat JENKINS_SSH_KEY)"
 #Username JENKINS_SSH_KEY
 Username_JENKINS_SSH_KEY="ubuntu"
 #Id JENKINS_SSH_KEY
@@ -108,6 +114,9 @@ main(){
 
     #Download jenkins-cli.ja if not already
     ls $JCJ > /dev/null 2>&1 && logokay "Successfully found $JCJ for ${Name}" || { curl -s "http://localhost:8080/jnlpJars/jenkins-cli.jar" -O -J && ls $JCJ > /dev/null 2>&1 && logokay "Successfully downloaded $JCJ for ${Name}" || { logerror "Failure obtaining $JCJ for ${Name}" && exiterror ; } ; }
+
+    #Download jenkins-cli.ja if not already
+    ls $ConfigReplacerFileName > /dev/null 2>&1 && logokay "Successfully found $ConfigReplacerFileName for ${Name}" || { curl -s $ConfigReplacer -O -J && ls $ConfigReplacerFileName > /dev/null 2>&1 && logokay "Successfully downloaded $ConfigReplacerFileName for ${Name}" || { logerror "Failure obtaining $ConfigReplacerFileName for ${Name}" && exiterror ; } ; }
 
     #Start the service if not already
     systemctl start jenkins > /dev/null 2>&1 && logokay "Successfully started ${Name}" || { logerror "Failure starting ${Name}" && exiterror ; }
@@ -161,6 +170,11 @@ main(){
     LoadedInitialConfigJenkins=$(cat $ConfigSSHJenkinsFileName) && logokay "Successfully loaded SSH configure file for ${Name}" || { logerror "Failure loading SSH configure file for ${Name}" && exiterror ; }
 
     #Set the ID, Description, Username and SSH-Key for the SSH configure file placeholders for SSH
+    echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_JENKINS_SSH_KEY/g" | sed "s/~Description~/$Description_JENKINS_SSH_KEY/g" | sed "s,~Username~,$Username_JENKINS_SSH_KEY,g" > $ConfigSSHJenkinsFileName && logokay "Successfully set SSH configure file for ${Name} SSH" || { logerror "Failure setting SSH configure file for ${Name} SSH" && exiterror ; }
+
+    #Set the SSH-Key for the SSH configure file placeholders for SSH
+    python3 $ConfigReplacerFileName $ConfigSSHJenkinsFileName $ConfigSSHJenkinsFileName ~SSH-Key~ $JENKINS_SSH_KEY && logokay "Successfully set SSH configure file for ${Name} SSH-Key" || { logerror "Failure setting SSH configure file for ${Name} SSH-Key" && exiterror ; }
+
     echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_JENKINS_SSH_KEY/g" | sed "s/~Description~/$Description_JENKINS_SSH_KEY/g" | sed "s,~Username~,$Username_JENKINS_SSH_KEY,g" | sed "s,~SSH-Key~,$JENKINS_SSH_KEY,g" > $ConfigSSHJenkinsFileName && logokay "Successfully set SSH configure file for ${Name} SSH" || { logerror "Failure setting SSH configure file for ${Name} SSH" && exiterror ; }
 
     #Remote send the SSH config SSH
