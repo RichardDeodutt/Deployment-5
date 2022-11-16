@@ -175,8 +175,6 @@ main(){
     #Set the SSH-Key for the SSH configure file placeholders for SSH
     python3 $ConfigReplacerFileName $ConfigSSHJenkinsFileName $ConfigSSHJenkinsFileName ~SSH-Key~ $JENKINS_SSH_KEY && logokay "Successfully set SSH configure file for ${Name} SSH-Key" || { logerror "Failure setting SSH configure file for ${Name} SSH-Key" && exiterror ; }
 
-    echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_JENKINS_SSH_KEY/g" | sed "s/~Description~/$Description_JENKINS_SSH_KEY/g" | sed "s,~Username~,$Username_JENKINS_SSH_KEY,g" | sed "s,~SSH-Key~,$JENKINS_SSH_KEY,g" > $ConfigSSHJenkinsFileName && logokay "Successfully set SSH configure file for ${Name} SSH" || { logerror "Failure setting SSH configure file for ${Name} SSH" && exiterror ; }
-
     #Remote send the SSH config SSH
     java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-credentials-by-xml system::system::jenkins _ < $ConfigSSHJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send SSH config for ${Name} SSH" || { test $? -eq 1 && logwarning "SSH config for ${Name} SSH already exists nothing changed" || { logerror "Failure executing send SSH config for ${Name} SSH" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
 
