@@ -111,13 +111,13 @@ Name_Terraform="Terraform"
 Description_Terraform="Terraform"
 
 #Host Docker
-Host_Terraform=$(cat DOCKER_IP)
+Host_Docker=$(cat DOCKER_IP)
 #Label Docker
-Label_Terraform="Docker"
+Label_Docker="Docker"
 #Name Docker
-Name_Terraform="Docker"
+Name_Docker="Docker"
 #Description Docker
-Description_Terraform="Docker"
+Description_Docker="Docker"
 
 #Store the initial secret config for Jenkins here
 LoadedInitialConfigJenkins=""
