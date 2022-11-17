@@ -31,6 +31,9 @@ ConfigCredJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-5
 #The configuration for Jenkins ssh
 ConfigSSHJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Configs/credential-ssh-jenkins-default.xml"
 
+#The configuration for Jenkins node
+ConfigNodeJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Configs/node-jenkins-default.xml"
+
 #The configuration for Jenkins job
 ConfigJobJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Configs/job-build-jenkins-default.xml"
 
@@ -45,6 +48,9 @@ ConfigCredJenkinsFileName="credential-cred-jenkins-default.xml"
 
 #The filename of the cred configuration file for Jenkins
 ConfigSSHJenkinsFileName="credential-ssh-jenkins-default.xml"
+
+#The filename of the node configuration file for Jenkins
+ConfigNodeJenkinsFileName="node-jenkins-default.xml"
 
 #The filename of the job configuration file for Jenkins
 ConfigJobJenkinsFileName="job-build-jenkins-default.xml"
@@ -94,6 +100,24 @@ Username_JENKINS_SSH_KEY="ubuntu"
 Id_JENKINS_SSH_KEY="SSH"
 #Description JENKINS_SSH_KEY
 Description_JENKINS_SSH_KEY="SSH"
+
+#Host Terraform
+Host_Terraform=$(cat TERRAFORM_IP)
+#Label Terraform
+Label_Terraform="Terraform"
+#Name Terraform
+Name_Terraform="Terraform"
+#Description Terraform
+Description_Terraform="Terraform"
+
+#Host Docker
+Host_Terraform=$(cat DOCKER_IP)
+#Label Docker
+Label_Terraform="Docker"
+#Name Docker
+Name_Terraform="Docker"
+#Description Docker
+Description_Terraform="Docker"
 
 #Store the initial secret config for Jenkins here
 LoadedInitialConfigJenkins=""
@@ -180,6 +204,36 @@ main(){
 
     #Remove SSH configure file
     rm $ConfigSSHJenkinsFileName && logokay "Successfully removed SSH configure file for ${Name}" || { logerror "Failure removing SSH configure file for ${Name}" && exiterror ; }
+
+    #Get the Jenkins node configure file
+    curl -s -X GET $ConfigNodeJenkins -O && logokay "Successfully obtained node configure file for ${Name}" || { logerror "Failure obtaining node configure file for ${Name}" && exiterror ; }
+
+    #Load the initial configuration for Jenkins
+    LoadedInitialConfigJenkins=$(cat $ConfigNodeJenkinsFileName) && logokay "Successfully loaded node configure file for ${Name}" || { logerror "Failure loading node configure file for ${Name}" && exiterror ; }
+
+    #Set the Name, Description, Label, Host and CredentialsId for the node configure file placeholders for Terraform
+    echo "$LoadedInitialConfigJenkins" | sed "s/~Name~/$Name_Terraform/g" | sed "s/~Description~/$Description_Terraform/g" | sed "s,~Label~,$Label_Terraform,g" | sed "s,~Host~,$Host_Terraform,g" | sed "s,~CredentialsId~,$Id_JENKINS_SSH_KEY,g" > $ConfigNodeJenkinsFileName && logokay "Successfully set node configure file for ${Name} Terraform" || { logerror "Failure setting node configure file for ${Name} Terraform" && exiterror ; }
+
+    #Remote send the node config GITHUB_CRED
+    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-node $Name_Terraform < $ConfigNodeJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send node config for ${Name} Terraform" || { test $? -eq 1 && logwarning "Node config for ${Name} Terraform already exists nothing changed" || { logerror "Failure executing send node config for ${Name} Terraform" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
+
+    #Remove node configure file
+    rm $ConfigNodeJenkinsFileName && logokay "Successfully removed node configure file for ${Name}" || { logerror "Failure removing node configure file for ${Name}" && exiterror ; }
+
+    #Get the Jenkins node configure file
+    curl -s -X GET $ConfigNodeJenkins -O && logokay "Successfully obtained node configure file for ${Name}" || { logerror "Failure obtaining node configure file for ${Name}" && exiterror ; }
+
+    #Load the initial configuration for Jenkins
+    LoadedInitialConfigJenkins=$(cat $ConfigNodeJenkinsFileName) && logokay "Successfully loaded node configure file for ${Name}" || { logerror "Failure loading node configure file for ${Name}" && exiterror ; }
+
+    #Set the Name, Description, Label, Host and CredentialsId for the node configure file placeholders for Docker
+    echo "$LoadedInitialConfigJenkins" | sed "s/~Name~/$Name_Docker/g" | sed "s/~Description~/$Description_Docker/g" | sed "s,~Label~,$Label_Docker,g" | sed "s,~Host~,$Host_Docker,g" | sed "s,~CredentialsId~,$Id_JENKINS_SSH_KEY,g" > $ConfigNodeJenkinsFileName && logokay "Successfully set node configure file for ${Name} Docker" || { logerror "Failure setting node configure file for ${Name} Docker" && exiterror ; }
+
+    #Remote send the node config GITHUB_CRED
+    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-node $Name_Docker < $ConfigNodeJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send node config for ${Name} Docker" || { test $? -eq 1 && logwarning "Node config for ${Name} Docker already exists nothing changed" || { logerror "Failure executing send node config for ${Name} Docker" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
+
+    #Remove node configure file
+    rm $ConfigNodeJenkinsFileName && logokay "Successfully removed node configure file for ${Name}" || { logerror "Failure removing node configure file for ${Name}" && exiterror ; }
 
     #Get the Jenkins job configure file
     curl -s -X GET $ConfigJobJenkins -O && logokay "Successfully obtained job configure file for ${Name}" || { logerror "Failure obtaining job configure file for ${Name}" && exiterror ; }
