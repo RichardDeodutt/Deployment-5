@@ -12,6 +12,13 @@ env:
   JENKINS_USERNAME: ${{ secrets.JENKINS_USERNAME }}
   JENKINS_PASSWORD: ${{ secrets.JENKINS_PASSWORD }}
   JENKINS_JOB_NAME: ${{ secrets.JENKINS_JOB_NAME }}
+  BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+  TABLE_NAME: ${{ secrets.TABLE_NAME }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_AMI: ${{ secrets.AWS_AMI }}
+  AWS_ITYPE: ${{ secrets.AWS_ITYPE }}
+  AWS_KEYNAME: ${{ secrets.AWS_KEYNAME }}
+  AWS_SECGROUPNAME: ${{ secrets.AWS_SECGROUPNAME }}
 
 jobs: 
   execute-jenkins-build-job: 
