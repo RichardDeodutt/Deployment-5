@@ -252,8 +252,8 @@ main(){
     #Set the Name, Description, Label, Host and CredentialsId for the node configure file placeholders for Terraform
     echo "$LoadedInitialConfigJenkins" | sed "s/~Name~/$Name_Terraform/g" | sed "s/~Description~/$Description_Terraform/g" | sed "s,~Label~,$Label_Terraform,g" | sed "s,~Host~,$Host_Terraform,g" | sed "s,~CredentialsId~,$Id_JENKINS_SSH_KEY,g" > $ConfigNodeJenkinsFileName && logokay "Successfully set node configure file for ${Name} Terraform" || { logerror "Failure setting node configure file for ${Name} Terraform" && exiterror ; }
 
-    #Remote send the node config GITHUB_CRED
-    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-node $Name_Terraform < $ConfigNodeJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send node config for ${Name} Terraform" || { test $? -eq 1 && logwarning "Node config for ${Name} Terraform already exists nothing changed" || { logerror "Failure executing send node config for ${Name} Terraform" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
+    #Remote send the node config Terraform
+    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-node $Name_Terraform < $ConfigNodeJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send node config for ${Name} Terraform" || { test $? -eq 4 && logwarning "Node config for ${Name} Terraform already exists nothing changed" || { logerror "Failure executing send node config for ${Name} Terraform" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
 
     #Get the Jenkins node configure file
     curl -s -X GET $ConfigNodeJenkins -O && logokay "Successfully obtained node configure file for ${Name}" || { logerror "Failure obtaining node configure file for ${Name}" && exiterror ; }
@@ -264,8 +264,8 @@ main(){
     #Set the Name, Description, Label, Host and CredentialsId for the node configure file placeholders for Docker
     echo "$LoadedInitialConfigJenkins" | sed "s/~Name~/$Name_Docker/g" | sed "s/~Description~/$Description_Docker/g" | sed "s,~Label~,$Label_Docker,g" | sed "s,~Host~,$Host_Docker,g" | sed "s,~CredentialsId~,$Id_JENKINS_SSH_KEY,g" > $ConfigNodeJenkinsFileName && logokay "Successfully set node configure file for ${Name} Docker" || { logerror "Failure setting node configure file for ${Name} Docker" && exiterror ; }
 
-    #Remote send the node config GITHUB_CRED
-    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-node $Name_Docker < $ConfigNodeJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send node config for ${Name} Docker" || { test $? -eq 1 && logwarning "Node config for ${Name} Docker already exists nothing changed" || { logerror "Failure executing send node config for ${Name} Docker" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
+    #Remote send the node config Docker
+    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-node $Name_Docker < $ConfigNodeJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send node config for ${Name} Docker" || { test $? -eq 4 && logwarning "Node config for ${Name} Docker already exists nothing changed" || { logerror "Failure executing send node config for ${Name} Docker" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
 
     #Remove node configure file
     rm $ConfigNodeJenkinsFileName && logokay "Successfully removed node configure file for ${Name}" || { logerror "Failure removing node configure file for ${Name}" && exiterror ; }
