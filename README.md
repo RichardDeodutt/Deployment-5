@@ -329,4 +329,36 @@ Set up a CI/CD pipeline from start to finish using a Jenkins server and deployin
         Jenkins
         ```
 
+- DOCKERHUB_USR
+
+    - Your username to login to DockerHub. Cannot contain spaces or dots. 
+
+        Secrets/Variables:
+
+        ```
+        DOCKERHUB_USR
+        ```
+
+        Example Below: 
+
+        ```
+        Jeff
+        ```
+
+- DOCKERHUB_PWD
+
+    - Your password to login to DockerHub. Cannot contain spaces or dots or some punctuation characters. 
+
+        Secrets/Variables:
+
+        ```
+        DOCKERHUB_PWD
+        ```
+
+        Example Below: 
+
+        ```
+        2WQ0vrQI
+        ```
+
 </details>

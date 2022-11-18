@@ -74,6 +74,20 @@ Id_AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY"
 #Description AWS_SECRET_ACCESS_KEY
 Description_AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY"
 
+#DOCKERHUB_USR
+DOCKERHUB_USR=$(cat DOCKERHUB_USR)
+#Id DOCKERHUB_USR
+Id_DOCKERHUB_USR="DOCKERHUB_USR"
+#Description DOCKERHUB_USR
+Description_DOCKERHUB_USR="DOCKERHUB_USR"
+
+#DOCKERHUB_PWD
+DOCKERHUB_PWD=$(cat DOCKERHUB_PWD)
+#Id DOCKERHUB_PWD
+Id_DOCKERHUB_PWD="DOCKERHUB_PWD"
+#Description DOCKERHUB_PWD
+Description_DOCKERHUB_PWD="DOCKERHUB_PWD"
+
 #GITHUB_USERNAME
 USER_GITHUB_USERNAME=$(cat USER_GITHUB_USERNAME)
 #GITHUB_TOKEN
@@ -169,6 +183,30 @@ main(){
     #Remote send the secret config AWS_SECRET_ACCESS_KEY
     java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-credentials-by-xml system::system::jenkins _ < $ConfigSecretJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send secret config for ${Name} AWS_SECRET_ACCESS_KEY" || { test $? -eq 1 && logwarning "Secret config for ${Name} AWS_SECRET_ACCESS_KEY already exists nothing changed" || { logerror "Failure executing send secret config for ${Name} AWS_SECRET_ACCESS_KEY" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
 
+    #Get the Jenkins secret configure file
+    curl -s -X GET $ConfigSecretJenkins -O && logokay "Successfully obtained secret configure file for ${Name}" || { logerror "Failure obtaining secret configure file for ${Name}" && exiterror ; }
+
+    #Load the initial configuration for Jenkins
+    LoadedInitialConfigJenkins=$(cat $ConfigSecretJenkinsFileName) && logokay "Successfully loaded secret configure file for ${Name}" || { logerror "Failure loading secret configure file for ${Name}" && exiterror ; }
+
+    #Set the ID, Description and secret for the secret configure file placeholders for DOCKERHUB_USR
+    echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_DOCKERHUB_USR/g" | sed "s/~Description~/$Description_DOCKERHUB_USR/g" | sed "s,~Secret~,$DOCKERHUB_USR,g" > $ConfigSecretJenkinsFileName && logokay "Successfully set secret configure file for ${Name} DOCKERHUB_USR" || { logerror "Failure setting secret configure file for ${Name} DOCKERHUB_USR" && exiterror ; }
+
+    #Remote send the secret config DOCKERHUB_USR
+    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-credentials-by-xml system::system::jenkins _ < $ConfigSecretJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send secret config for ${Name} DOCKERHUB_USR" || { test $? -eq 1 && logwarning "Secret config for ${Name} DOCKERHUB_USR already exists nothing changed" || { logerror "Failure executing send secret config for ${Name} DOCKERHUB_USR" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
+
+    #Get the Jenkins secret configure file
+    curl -s -X GET $ConfigSecretJenkins -O && logokay "Successfully obtained secret configure file for ${Name}" || { logerror "Failure obtaining secret configure file for ${Name}" && exiterror ; }
+
+    #Load the initial configuration for Jenkins
+    LoadedInitialConfigJenkins=$(cat $ConfigSecretJenkinsFileName) && logokay "Successfully loaded secret configure file for ${Name}" || { logerror "Failure loading secret configure file for ${Name}" && exiterror ; }
+
+    #Set the ID, Description and secret for the secret configure file placeholders for DOCKERHUB_PWD
+    echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_DOCKERHUB_PWD/g" | sed "s/~Description~/$Description_DOCKERHUB_PWD/g" | sed "s,~Secret~,$DOCKERHUB_PWD,g" > $ConfigSecretJenkinsFileName && logokay "Successfully set secret configure file for ${Name} DOCKERHUB_PWD" || { logerror "Failure setting secret configure file for ${Name} DOCKERHUB_PWD" && exiterror ; }
+
+    #Remote send the secret config DOCKERHUB_PWD
+    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-credentials-by-xml system::system::jenkins _ < $ConfigSecretJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send secret config for ${Name} DOCKERHUB_PWD" || { test $? -eq 1 && logwarning "Secret config for ${Name} DOCKERHUB_PWD already exists nothing changed" || { logerror "Failure executing send secret config for ${Name} DOCKERHUB_PWD" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
+
     #Remove secret configure file
     rm $ConfigSecretJenkinsFileName && logokay "Successfully removed secret configure file for ${Name}" || { logerror "Failure removing secret configure file for ${Name}" && exiterror ; }
 
@@ -216,9 +254,6 @@ main(){
 
     #Remote send the node config GITHUB_CRED
     java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-node $Name_Terraform < $ConfigNodeJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send node config for ${Name} Terraform" || { test $? -eq 1 && logwarning "Node config for ${Name} Terraform already exists nothing changed" || { logerror "Failure executing send node config for ${Name} Terraform" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
-
-    #Remove node configure file
-    rm $ConfigNodeJenkinsFileName && logokay "Successfully removed node configure file for ${Name}" || { logerror "Failure removing node configure file for ${Name}" && exiterror ; }
 
     #Get the Jenkins node configure file
     curl -s -X GET $ConfigNodeJenkins -O && logokay "Successfully obtained node configure file for ${Name}" || { logerror "Failure obtaining node configure file for ${Name}" && exiterror ; }
