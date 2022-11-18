@@ -85,6 +85,7 @@ if __name__ == "__main__":
     while True:
         try:
             app.run
-        except:
+        except Exception as e:
             print('Error while running')
+            print(str(e))
             time.sleep(15)
