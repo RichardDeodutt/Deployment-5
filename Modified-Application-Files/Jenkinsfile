@@ -108,6 +108,11 @@ pipeline{
           NO_COLOR=1 /usr/bin/npx cypress run --config video=false --spec cypress/integration/test.spec.js
           '''
       }
+      post{
+        always {
+          junit 'test-reports/cypress-results.xml'
+        }
+      }
     }
     stage('Wait 5 Minutes') {
       steps {
