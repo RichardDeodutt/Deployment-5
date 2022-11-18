@@ -18,7 +18,7 @@ pipeline{
                       string(credentialsId: 'DOCKERHUB_PWD', variable: 'dockerhub_pwd')]) {
                         dir('intDocker') {
                             sh '''#!/bin/bash
-                              docker login --username $dockerhub_usr --password $docker_pwd
+                              docker login --username $dockerhub_usr --password $dockerhub_pwd
                               docker build -t $dockerhub_usr/d5-adminer:latest ./adminer
                               docker build -t $dockerhub_usr/d5-mysql:latest ./mysql
                               docker build -t $dockerhub_usr/d5-nginx:latest ./nginx
