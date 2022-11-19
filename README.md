@@ -446,6 +446,10 @@ I used Adminer to connect to and manage the database and Nginx for the reverse p
 
 # Notes
 
+<details>
+
+<summary>Show Notes</summary>
+
 - The Jenkins Server seems to become unresponsive during cypress test it might be because of not enough resources so I moved it to the Terraform Agent to do the test. 
 
 - Containers communicate to each other using localhost and the nginx container is the link connecting it to the loadbalancer and therefore the internet. 
@@ -462,7 +466,13 @@ I used Adminer to connect to and manage the database and Nginx for the reverse p
 
 - All the Github Secrets are required to function correctly. 
 
+</details>
+
 # Issues 
+
+<details>
+
+<summary>Show Issues</summary>
 
 - Sometimes apt fails because of `broken packages` or other reason making this system `not 100% reliable`. The broken packages issue is handled as a warning and ignored. 
 
@@ -472,25 +482,37 @@ I used Adminer to connect to and manage the database and Nginx for the reverse p
 
 - On Adminer using `localhost` does not work and you need to use `127.0.0.1` instead for some `strange reason`. 
 
-- Security is a huge issue with this setup and using secrets to replace the database password in the public repo and other sensitive information would greatly improve security. 
+- Security is a `huge issue` with this setup and using `secrets` to replace the `database password` in the `public repo` and other sensitive information would greatly improve `security`. 
 
-# Improvements 
+</details>
 
-- With some more times I can work on the Issues
+# Possible Improvements 
 
-- Maybe I could use Ansible to do the configuration of Jenkins. 
+<details>
 
-- Improve the Terraform files to create the secuirty group and keypair and other resources it needs for the Jenkins Server. 
+<summary>Show Possible Improvements</summary>
 
-- Making this system less unstable. 
+- With some more times I can work on the `Issues`
 
-- Tidy up the code to be more readable espeically those bash scripts, they need more functions. 
+- Maybe I could use `Ansible` to do the configuration of Jenkins. 
 
-- Right now I have one container with Nginx but I could potentially have more for redundancy or just have them in it's own task and have several replicas of it all being pointed at by the load balancer. 
+- Improve the `Terraform files` to create the secuirty group and keypair and other resources it needs for the Jenkins Server. 
 
-- Improve security. 
+- Making this system less `unstable`. 
+
+- Tidy up the code to be more `readable` espeically those `bash scripts`, they need more `functions`. 
+
+- Right now I have one container with Nginx but I could `potentially` have more for redundancy or just have them in it's own task and have `several replicas` of it all being pointed at by the `load balancer`. 
+
+- Improve `security`. 
+
+</details>
 
 # Index
+
+<details>
+
+<summary>Show Index</summary>
 
 - [.github/workflows](https://github.com/RichardDeodutt/Deployment-5/tree/main/.github/workflows) the Github Actions Workflows. 
 
@@ -507,3 +529,5 @@ I used Adminer to connect to and manage the database and Nginx for the reverse p
 - [Terraform](https://github.com/RichardDeodutt/Deployment-5/tree/main/Terraform) Holds the terraform files for the pipeline and remote statefile. 
 
 - [Utilities](https://github.com/RichardDeodutt/Deployment-5/tree/main/Utilities) utilities such as a python script that replaces text with other text. 
+
+</details>
