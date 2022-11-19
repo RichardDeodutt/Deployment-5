@@ -66,6 +66,8 @@ I used Adminer to connect to and manage the database and Nginx for the reverse p
 
 - The scripts in the [Runners](https://github.com/RichardDeodutt/Deployment-5/tree/main/Runners) directory run the scrips in the [Scripts](https://github.com/RichardDeodutt/Deployment-5/tree/main/Scripts) directory. 
 
+</details>
+
 # Secrets/Variables
 
 <details>
