@@ -77,6 +77,9 @@ pipeline{
       }
     }
     stage('Cypress E2E') {
+      agent{
+        label 'Terraform'
+      }
       steps {
         sh "echo ${env.server_url} > server_url"
         sh '''#!/bin/bash
